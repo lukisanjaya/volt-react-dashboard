@@ -26,12 +26,6 @@ export default () => {
             <Dropdown.Item className="fw-bold">
               <FontAwesomeIcon icon={faUserShield} className="me-2" /> Preview Security
             </Dropdown.Item>
-
-            <Dropdown.Divider />
-
-            <Dropdown.Item className="fw-bold">
-              <FontAwesomeIcon icon={faRocket} className="text-danger me-2" /> Upgrade to Pro
-            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
 

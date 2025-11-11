@@ -73,6 +73,7 @@ $primary:       #262B40;
 $secondary:     #61DAFB;
 $tertiary:      #1B998B;
 $quaternary:    #C96480;
+$quinary:       #ff6b35;
 
 // Series names and colors. This can be extended or customized as desired. Just add more series and colors.
 $ct-series-names: (a, b, c, d, e, f, g) !default;
@@ -89,7 +90,7 @@ $ct-series-colors: (
 
 // Mobile landing color scheme
 $primary-app:     #EBF4F6;
-$secondary-app:   #424AA0;
+$secondary-app:   #ff6b35;
 
 $success:       $green;
 $info:          $blue;
@@ -143,6 +144,7 @@ $theme-colors: map-merge((
   "secondary":     $secondary,
   "tertiary":      $tertiary,
   "quaternary":    $quaternary,
+  "quinary":       $quinary,
   "primary-app":   $primary-app,
   "secondary-app": $secondary-app,
   "light":         $light,

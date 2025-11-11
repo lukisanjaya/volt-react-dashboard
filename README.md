@@ -25,9 +25,23 @@ This library is based on the latest version of the [Bootstrap 5 CSS framework](h
 
 Volt React included over 100 React UI elements such as buttons, form elements, alerts, modals, tabs, navigation bars, date pickers, and many more. They are all custom styled by professional designers as an extension of the base Bootstrap elements using Sass variables, mixins, and custom markup.
 
-## 10 Example Dashboard Pages
+## Enhanced Features
 
-Get started with 10 beautiful example pages for a dashboard which is based on the most popular dashboard template written in Bootstrap 5, called [Volt Dashboard](https://github.com/themesberg/volt-bootstrap-5-dashboard).
+### CRUD Operations
+- **Products Management** - Complete CRUD operations with DummyJSON API integration
+- **Dragon Ball Characters** - Browse and view character details from Dragon Ball API
+- **Reusable DataTable Component** - Standardized table with search, pagination, and sorting
+- **Toast Notifications** - User-friendly feedback system
+- **Authentication System** - JWT-based login with protected routes
+
+### API Integrations
+- **DummyJSON API** - Products, authentication, and user management
+- **Dragon Ball API** - Character data with transformations and planet information
+- **Centralized API Services** - Consistent error handling and token management
+
+## 12+ Example Dashboard Pages
+
+Get started with 12+ beautiful example pages including the original dashboard pages plus new CRUD implementations based on [Volt Dashboard](https://github.com/themesberg/volt-bootstrap-5-dashboard).
 
 ## Getting Started and live code editor
 
@@ -72,9 +86,9 @@ This product is built using the following widely used technologies:
 
 ## Demo
 
-| Dashboard | Transactions | Settings | Forms |
+| Dashboard | Products | Characters | Settings |
 | --- | --- | --- | --- |
-| [![Dashboard](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/overview.jpg)](https://demo.themesberg.com/volt-react-dashboard/#/dashboard/overview) | [![Transactions](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/transactions.jpg)](https://demo.themesberg.com/volt-react-dashboard/#/transactions) | [![Settings](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/settings.jpg)](https://demo.themesberg.com/volt-react-dashboard/#/settings) | [![Tables](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/tables.jpg)](https://demo.themesberg.com/volt-react-dashboard/#/tables/bootstrap-tables)
+| [![Dashboard](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/overview.jpg)](http://localhost:3000/) | [![Products](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/transactions.jpg)](http://localhost:3000/products) | [![Characters](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/tables.jpg)](http://localhost:3000/characters) | [![Settings](https://themesberg.s3.us-east-2.amazonaws.com/public/products/volt-pro-react-dashboard/github/settings.jpg)](http://localhost:3000/settings)
 
 | Sign in | Sign up | Forgot password | Reset password |
 | --- | --- | --- | --- |
@@ -131,7 +145,40 @@ npm install
 npm run start
 ```
 
-6. Open http://localhost:3000 to view it in the browser. Any changes you make to the code will be automatically reflected in the browser.
+6. Open http://localhost:3000 to view it in the browser.
+
+## New Components
+
+### DataTable Component
+Reusable table component with built-in features:
+- Search functionality with debounced input
+- Pagination with First, Previous, Next, Last navigation
+- Configurable items per page (5, 10, 20, 50)
+- Custom column rendering
+- Loading and empty states
+- Responsive design
+
+### Toast Notification Component
+User-friendly notification system:
+- Auto-hide with configurable delay
+- Multiple types (success, error, warning, info)
+- Fixed positioning (top-right)
+- Manual dismissible
+- Icon integration
+
+## API Integration
+
+### DummyJSON API
+- **Authentication**: Login with JWT tokens
+- **Products**: Full CRUD operations
+- **Users**: Profile management
+- **Base URL**: https://dummyjson.com
+
+### Dragon Ball API
+- **Characters**: Browse character database
+- **Transformations**: View character transformations
+- **Planets**: Origin planet information
+- **Base URL**: https://dragonball-api.com/api http://localhost:3000 to view it in the browser. Any changes you make to the code will be automatically reflected in the browser.
 
 7. If you want to generate the production files, change the `homepage` value from the `package.json` to the domain name that the app will be hosted on, and then run the following command in the terminal:
 

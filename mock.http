@@ -1,0 +1,9 @@
+###
+curl -X POST "https://apimock.lazycatlabs.com/v1/api/user" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Mudassir",
+    "email": "mudassir@lazycatlabs.com",
+    "password": "pass123"
+  }'

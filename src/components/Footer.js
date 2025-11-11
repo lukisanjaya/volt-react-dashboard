@@ -13,7 +13,8 @@ import { Routes } from "../routes";
 
 export default (props) => {
   const currentYear = moment().get("year");
-  const showSettings = props.showSettings;
+  const showSettings = false;
+  // const showSettings = props.showSettings;
 
   const toggleSettings = (toggle) => {
     props.toggleSettings(toggle);
@@ -21,6 +22,7 @@ export default (props) => {
 
   return (
     <div>
+      {/** 
       {showSettings ? (
         <Card className="theme-settings">
           <Card.Body className="pt-4">
@@ -60,6 +62,7 @@ export default (props) => {
           </Card.Body>
         </Card>
       )}
+      */}
       <footer className="footer section py-5">
         <Row>
           <Col xs={12} lg={6} className="mb-4 mb-lg-0">

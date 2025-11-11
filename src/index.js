@@ -14,8 +14,8 @@
 // * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal.
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { HashRouter } from "react-router-dom";
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from "react-router-dom";
 
 // core styles
 import "./scss/volt.scss";
@@ -26,10 +26,23 @@ import "react-datetime/css/react-datetime.css";
 import HomePage from "./pages/HomePage";
 import ScrollToTop from "./components/ScrollToTop";
 
-ReactDOM.render(
-  <HashRouter>
+// Suppress development warnings
+if (process.env.NODE_ENV === 'development') {
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    if (args[0]?.includes?.('defaultProps') || args[0]?.includes?.('Route render')) {
+      return;
+    }
+    originalWarn(...args);
+  };
+}
+
+const container = document.getElementById("root");
+const root = createRoot(container);
+
+root.render(
+  <BrowserRouter>
     <ScrollToTop />
     <HomePage />
-  </HashRouter>,
-  document.getElementById("root")
+  </BrowserRouter>
 );

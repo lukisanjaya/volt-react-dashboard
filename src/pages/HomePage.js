@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Switch, Redirect } from "react-router-dom";
 import { Routes } from "../routes";
+import { SidebarProvider, useSidebar } from "../contexts/SidebarContext";
 
 // pages
 import Presentation from "./Presentation";
@@ -11,6 +12,9 @@ import Settings from "./Settings";
 import BootstrapTables from "./tables/BootstrapTables";
 import Signin from "./examples/Signin";
 import Signup from "./examples/Signup";
+import { Login } from "./auth";
+import { Products, ProductDetail, CreateProduct, EditProduct } from "./products";
+import { CharactersList, CharacterDetail } from "./characters";
 import ForgotPassword from "./examples/ForgotPassword";
 import ResetPassword from "./examples/ResetPassword";
 import Lock from "./examples/Lock";
@@ -31,6 +35,7 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Preloader from "../components/Preloader";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 import Accordion from "./components/Accordion";
 import Alerts from "./components/Alerts";
@@ -64,10 +69,18 @@ const RouteWithLoader = ({ component: Component, ...rest }) => {
 
 const RouteWithSidebar = ({ component: Component, ...rest }) => {
   const [loaded, setLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const { sidebarCollapsed } = useSidebar();
 
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 1000);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const localStorageIsSettingsVisible = () => {
@@ -81,13 +94,20 @@ const RouteWithSidebar = ({ component: Component, ...rest }) => {
     localStorage.setItem('settingsVisible', !showSettings);
   }
 
+  const getMainStyle = () => {
+    if (isMobile) {
+      return { marginLeft: '0', paddingTop: '80px', transition: 'margin-left 0.3s', overflowX: 'hidden' };
+    }
+    return { marginLeft: sidebarCollapsed ? '0' : '280px', transition: 'margin-left 0.3s', overflowX: 'hidden' };
+  };
+
   return (
     <Route {...rest} render={props => (
       <>
         <Preloader show={loaded ? false : true} />
         <Sidebar />
 
-        <main className="content">
+        <main className="content" style={getMainStyle()}>
           <Navbar />
           <Component {...props} />
           <Footer toggleSettings={toggleSettings} showSettings={showSettings} />
@@ -99,9 +119,11 @@ const RouteWithSidebar = ({ component: Component, ...rest }) => {
 };
 
 export default () => (
-  <Switch>
+  <SidebarProvider>
+    <Switch>
     <RouteWithLoader exact path={Routes.Presentation.path} component={Presentation} />
     <RouteWithLoader exact path={Routes.Signin.path} component={Signin} />
+    <RouteWithLoader exact path={Routes.Login.path} component={Login} />
     <RouteWithLoader exact path={Routes.Signup.path} component={Signup} />
     <RouteWithLoader exact path={Routes.ForgotPassword.path} component={ForgotPassword} />
     <RouteWithLoader exact path={Routes.ResetPassword.path} component={ResetPassword} />
@@ -110,39 +132,114 @@ export default () => (
     <RouteWithLoader exact path={Routes.ServerError.path} component={ServerError} />
 
     {/* pages */}
-    <RouteWithSidebar exact path={Routes.DashboardOverview.path} component={DashboardOverview} />
-    <RouteWithSidebar exact path={Routes.Upgrade.path} component={Upgrade} />
-    <RouteWithSidebar exact path={Routes.Transactions.path} component={Transactions} />
-    <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
-    <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
+    <ProtectedRoute exact path={Routes.DashboardOverview.path}>
+      <RouteWithSidebar exact path={Routes.DashboardOverview.path} component={DashboardOverview} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Upgrade.path}>
+      <RouteWithSidebar exact path={Routes.Upgrade.path} component={Upgrade} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Transactions.path}>
+      <RouteWithSidebar exact path={Routes.Transactions.path} component={Transactions} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Settings.path}>
+      <RouteWithSidebar exact path={Routes.Settings.path} component={Settings} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.CreateProduct.path}>
+      <RouteWithSidebar exact path={Routes.CreateProduct.path} component={CreateProduct} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.EditProduct.path}>
+      <RouteWithSidebar exact path={Routes.EditProduct.path} component={EditProduct} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Products.path}>
+      <RouteWithSidebar exact path={Routes.Products.path} component={Products} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.ProductDetail.path}>
+      <RouteWithSidebar exact path={Routes.ProductDetail.path} component={ProductDetail} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Characters.path}>
+      <RouteWithSidebar exact path={Routes.Characters.path} component={CharactersList} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.CharacterDetail.path}>
+      <RouteWithSidebar exact path={Routes.CharacterDetail.path} component={CharacterDetail} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.BootstrapTables.path}>
+      <RouteWithSidebar exact path={Routes.BootstrapTables.path} component={BootstrapTables} />
+    </ProtectedRoute>
 
     {/* components */}
-    <RouteWithSidebar exact path={Routes.Accordions.path} component={Accordion} />
-    <RouteWithSidebar exact path={Routes.Alerts.path} component={Alerts} />
-    <RouteWithSidebar exact path={Routes.Badges.path} component={Badges} />
-    <RouteWithSidebar exact path={Routes.Breadcrumbs.path} component={Breadcrumbs} />
-    <RouteWithSidebar exact path={Routes.Buttons.path} component={Buttons} />
-    <RouteWithSidebar exact path={Routes.Forms.path} component={Forms} />
-    <RouteWithSidebar exact path={Routes.Modals.path} component={Modals} />
-    <RouteWithSidebar exact path={Routes.Navs.path} component={Navs} />
-    <RouteWithSidebar exact path={Routes.Navbars.path} component={Navbars} />
-    <RouteWithSidebar exact path={Routes.Pagination.path} component={Pagination} />
-    <RouteWithSidebar exact path={Routes.Popovers.path} component={Popovers} />
-    <RouteWithSidebar exact path={Routes.Progress.path} component={Progress} />
-    <RouteWithSidebar exact path={Routes.Tables.path} component={Tables} />
-    <RouteWithSidebar exact path={Routes.Tabs.path} component={Tabs} />
-    <RouteWithSidebar exact path={Routes.Tooltips.path} component={Tooltips} />
-    <RouteWithSidebar exact path={Routes.Toasts.path} component={Toasts} />
+    <ProtectedRoute exact path={Routes.Accordions.path}>
+      <RouteWithSidebar exact path={Routes.Accordions.path} component={Accordion} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Alerts.path}>
+      <RouteWithSidebar exact path={Routes.Alerts.path} component={Alerts} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Badges.path}>
+      <RouteWithSidebar exact path={Routes.Badges.path} component={Badges} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Breadcrumbs.path}>
+      <RouteWithSidebar exact path={Routes.Breadcrumbs.path} component={Breadcrumbs} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Buttons.path}>
+      <RouteWithSidebar exact path={Routes.Buttons.path} component={Buttons} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Forms.path}>
+      <RouteWithSidebar exact path={Routes.Forms.path} component={Forms} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Modals.path}>
+      <RouteWithSidebar exact path={Routes.Modals.path} component={Modals} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Navs.path}>
+      <RouteWithSidebar exact path={Routes.Navs.path} component={Navs} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Navbars.path}>
+      <RouteWithSidebar exact path={Routes.Navbars.path} component={Navbars} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Pagination.path}>
+      <RouteWithSidebar exact path={Routes.Pagination.path} component={Pagination} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Popovers.path}>
+      <RouteWithSidebar exact path={Routes.Popovers.path} component={Popovers} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Progress.path}>
+      <RouteWithSidebar exact path={Routes.Progress.path} component={Progress} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Tables.path}>
+      <RouteWithSidebar exact path={Routes.Tables.path} component={Tables} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Tabs.path}>
+      <RouteWithSidebar exact path={Routes.Tabs.path} component={Tabs} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Tooltips.path}>
+      <RouteWithSidebar exact path={Routes.Tooltips.path} component={Tooltips} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.Toasts.path}>
+      <RouteWithSidebar exact path={Routes.Toasts.path} component={Toasts} />
+    </ProtectedRoute>
 
     {/* documentation */}
-    <RouteWithSidebar exact path={Routes.DocsOverview.path} component={DocsOverview} />
-    <RouteWithSidebar exact path={Routes.DocsDownload.path} component={DocsDownload} />
-    <RouteWithSidebar exact path={Routes.DocsQuickStart.path} component={DocsQuickStart} />
-    <RouteWithSidebar exact path={Routes.DocsLicense.path} component={DocsLicense} />
-    <RouteWithSidebar exact path={Routes.DocsFolderStructure.path} component={DocsFolderStructure} />
-    <RouteWithSidebar exact path={Routes.DocsBuild.path} component={DocsBuild} />
-    <RouteWithSidebar exact path={Routes.DocsChangelog.path} component={DocsChangelog} />
+    <ProtectedRoute exact path={Routes.DocsOverview.path}>
+      <RouteWithSidebar exact path={Routes.DocsOverview.path} component={DocsOverview} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.DocsDownload.path}>
+      <RouteWithSidebar exact path={Routes.DocsDownload.path} component={DocsDownload} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.DocsQuickStart.path}>
+      <RouteWithSidebar exact path={Routes.DocsQuickStart.path} component={DocsQuickStart} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.DocsLicense.path}>
+      <RouteWithSidebar exact path={Routes.DocsLicense.path} component={DocsLicense} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.DocsFolderStructure.path}>
+      <RouteWithSidebar exact path={Routes.DocsFolderStructure.path} component={DocsFolderStructure} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.DocsBuild.path}>
+      <RouteWithSidebar exact path={Routes.DocsBuild.path} component={DocsBuild} />
+    </ProtectedRoute>
+    <ProtectedRoute exact path={Routes.DocsChangelog.path}>
+      <RouteWithSidebar exact path={Routes.DocsChangelog.path} component={DocsChangelog} />
+    </ProtectedRoute>
 
-    <Redirect to={Routes.NotFound.path} />
-  </Switch>
+      <Redirect to={Routes.NotFound.path} />
+    </Switch>
+  </SidebarProvider>
 );

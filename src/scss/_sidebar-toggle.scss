@@ -1,0 +1,51 @@
+#sidebar-toggle {
+  background: #262b40;
+  border: 1px solid #3a416f;
+  border-radius: 8px;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: #3a416f;
+    border-color: #4c5a8a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(58, 65, 111, 0.3);
+  }
+  
+  .toggle-icon {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover .toggle-icon {
+    transform: scale(1.1);
+  }
+}
+
+// Sidebar active navigation styles
+.sidebar .nav-item.active {
+  .nav-link {
+    background: transparent !important;
+    border: none !important;
+    color: #ff6b35 !important;
+    
+    .sidebar-text {
+      color: #ff6b35 !important;
+      font-weight: 600;
+    }
+    
+    .sidebar-icon {
+      color: #ff6b35 !important;
+    }
+  }
+}
